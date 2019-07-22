@@ -1,0 +1,15 @@
+
+
+.jumbotron {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+#add-train {
+    margin-top: 32px;
+    margin-bottom: 40px;
+}
+
+.table th {
+    border: 0;
+}
