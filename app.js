@@ -12,7 +12,7 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 
-
+var database = firebase.database();
 
 $(document).ready(function () {
 
@@ -22,16 +22,49 @@ e.preventDefault();
 
 var trainName = $("#train-name").val().trim();
 var destination = $("#dest").val().trim();
-var firstTrain = $("#train-time").val().trim();
+var firstTrain = moment($("#train-time").val().trim(), "HH:mm").format("HH:mm"); 
 var frequency = $("#freq").val().trim();
 
+var train = {
+    train: trainName,
+    destination: destination,
+    trainTime: firstTrain,
+    frequency, frequency
+};
+
+database.ref().push(train);
+
+$("#train-name").val("");
+$("#dest").val("");
+$("#train-time").val("");
+$("#freq").val("");
+
+});
 
 
-})
+database.ref().on("child_added", function(snapshot) {
+
+      var trainName = snapshot.val().train;
+      var destination = snapshot.val().destination;
+      var firstTrain = snapshot.val().trainTime;
+      var frequency = snapshot.val().frequency;
+
+      var remainder = (moment().diff(moment(firstTrain, "HH:mm"), "minutes"))%frequency;
+      var minutes = frequency - remainder;
+      var nextArrival = moment().add(minutes, "m").format("HH:mm A");
 
 
 
+      var newRow = $("<tr>").append(
+          $("<td>").html(trainName),
+          $("<td>").html(destination),
+          $("<td>").html(frequency),
+          $("<td>").html(nextArrival),
+          $("<td>").html(minutes)   
+      );
 
+      $(".table > tbody").append(newRow);
 
+  });
 
-})
+});
