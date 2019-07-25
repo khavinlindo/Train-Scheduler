@@ -52,7 +52,11 @@ database.ref().on("child_added", function(snapshot) {
       var remainder = (moment().diff(moment(firstTrain, "HH:mm"), "minutes"))%frequency;
       var minutes = frequency - remainder;
       var nextArrival = moment().add(minutes, "m").format("HH:mm A");
-
+      
+      console.log("First time: "+firstTrain);
+      console.log("Frequency: "+minutes);
+      console.log("Next arrival time: "+nextArrival);
+      
 
 
       var newRow = $("<tr>").append(
